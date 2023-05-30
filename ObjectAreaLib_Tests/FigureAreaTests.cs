@@ -1,10 +1,53 @@
 using ObjectAreaLib;
+using System.Diagnostics.SymbolStore;
 
 namespace ObjectAreaLib_Tests
 {
     [TestClass]
     public class FigureAreaTests
     {
+        [TestMethod]
+        public void IsRightTriangle_RightTriangleSides_True()
+        {
+            double[] sides = new[] { 3d, 5d, 4d };
+            bool expected = true;
+
+            bool result = FigureArea.IsRightTriangle(sides);
+
+            Assert.AreEqual(expected, result);
+        }
+        [TestMethod]
+        public void IsRightTriangle_SimpleTriangleSides_False()
+        {
+            double[] sides = new[] { 2d, 5d, 4d };
+            bool expected = false;
+
+            bool result = FigureArea.IsRightTriangle(sides);
+
+            Assert.AreEqual(expected, result);
+        }
+        [TestMethod]
+        public void IsEquletiral_EqualSides_True()
+        {
+            double[] sides = new[] { 3d, 3d, 3d };
+            bool expected = true;
+
+            bool result = FigureArea.IsEquilateral(sides);
+
+            Assert.AreEqual(expected, result);
+        }
+        
+        [TestMethod]
+        public void IsEquletiral_UnequalSides_False()
+        {
+            double[] sides = new[] { 3d, 8d, 5d };
+            bool expected = false;
+
+            bool result = FigureArea.IsEquilateral(sides);
+
+            Assert.AreEqual(expected, result);
+        }
+
         [TestMethod]
         public void GetCircleArea_ValidRadius_ComputesArea()
         {
@@ -67,9 +110,27 @@ namespace ObjectAreaLib_Tests
         [TestMethod]
         public void GetCircleArea_OneSideTwoZeros_Throws()
         {
-            double[] sides = new[] { 5d, 0d, 0d};
+            double[] sides = new[] { 5d, 0d, 0d };
 
             Assert.ThrowsException<NotImplementedException>(() => FigureArea.GetTriangleArea(sides));
+        }
+
+        [TestMethod]
+        public void GetPolygonArea_FourPoints_ComputesArea()
+        {
+            (double, double)[] sides = new[]
+            {
+                (4d, 10d),
+                (9d, 7d),
+                (11d, 2d),
+                (2d, 2d)
+            };
+            double expexted = 45.5;
+            double delta = 0.0001;
+
+            double area = FigureArea.GetPolygonArea(sides);
+
+            Assert.AreEqual(expexted, area, delta);
         }
     }
 }
